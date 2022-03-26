@@ -24,14 +24,16 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
+    outputs:
+      RELEASE_VERSION: ${{ steps.semver.outputs }}
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
       with:
         ref: ${{ github.head_ref }}   # checkout the correct branch name
         fetch-depth: 0                # fetch the whole repo history
-        
     - name: Git Version
+      id: semver
       # You may pin to the exact commit or the version.
       # uses: codacy/git-version@fa06788276d7492a2af01662649696d249ecf4cb
       uses: codacy/git-version@2.4.0
@@ -46,6 +48,28 @@ jobs:
         log-paths: ./ # optional, default is ./
     # Runs a single command using the runners shell
     - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }} $VERSION"
+      run: echo "Hello ${{ github.event.inputs.name }} ${{ steps.semver.outputs.version }}"
     - name: Echo Env
       run: env
+      
+#   semver:
+#     name: 'Generate Version'
+#     runs-on: ubuntu-latest
+#     outputs:
+#       RELEASE_VERSION: ${{ steps.semver.outputs.semantic_version }}
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v2
+#         with:
+#           fetch-depth: '0'
+#       - name: Semver run
+#         id: semver
+#         uses: lukaszraczylo/semver-generator@v1
+#         with:
+#           config_file: semver.yaml
+#           repository_local: true
+#           github_username: a121073_abcorp
+#           github_token: ${{ secrets.SEMVER_acess }}
+#       - name: Semver check
+#         run: |
+#           echo "Semantic version detected: ${{ steps.semver.outputs.semantic_version }}"      
