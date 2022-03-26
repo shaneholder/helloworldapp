@@ -25,7 +25,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     outputs:
-      RELEASE_VERSION: ${{ steps.semver.outputs }}
+      RELEASE_VERSION: ${{ steps.semver.outputs.version }}
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
