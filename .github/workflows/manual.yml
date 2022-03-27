@@ -57,7 +57,13 @@ jobs:
       run: env
 
     - name: Update Version
-      run: echo ${{ steps.semver.outputs.version }} >> index.html
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git checkout -b gh-pages
+        echo ${{ steps.semver.outputs.version }} >> index.html
+        git commit -a -m "update version file"
+        git push origin gh-pages
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
@@ -67,21 +73,21 @@ jobs:
         # A file, directory or wildcard pattern that describes what to upload
         path: index.html
 
-    - name: Commit files
-      id: commit
-      continue-on-error: true
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add --all
-        if [-z "$(git status --porcelain)"]; then
-           echo "::set-output name=push::false"
-        else
-           git commit -m "Add changes" -a
-           echo "::set-output name=push::true"
-        fi
-        git push
-      shell: bash        
+#     - name: Commit files
+#       id: commit
+#       continue-on-error: true
+#       run: |
+#         git config --local user.email "action@github.com"
+#         git config --local user.name "GitHub Action"
+#         git add --all
+#         if [-z "$(git status --porcelain)"]; then
+#            echo "::set-output name=push::false"
+#         else
+#            git commit -m "Add changes" -a
+#            echo "::set-output name=push::true"
+#         fi
+#         git push
+#       shell: bash        
     
 #   semver:
 #     name: 'Generate Version'
