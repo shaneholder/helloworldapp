@@ -60,8 +60,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git checkout -b gh-pages
-        git pull origin gh-pages
+        git checkout gh-pages
         echo ${{ steps.semver.outputs.version }} >> docs/index.txt
         git commit -a -m "update version file"
         git push origin gh-pages
