@@ -28,7 +28,7 @@ jobs:
       RELEASE_VERSION: ${{ steps.semver.outputs.version }}
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.head_ref }}   # checkout the correct branch name
         fetch-depth: 0                # fetch the whole repo history
@@ -73,7 +73,6 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git pull
         git add --all
         if [-z "$(git status --porcelain)"]; then
            echo "::set-output name=push::false"
@@ -81,6 +80,7 @@ jobs:
            git commit -m "Add changes" -a
            echo "::set-output name=push::true"
         fi
+        git push
       shell: bash        
     
 #   semver:
