@@ -62,6 +62,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git checkout gh-pages
         echo ${{ steps.semver.outputs.version }} >> docs/index.txt
+        git add docs/index.txt
         git commit -a -m "update version file"
         git push origin gh-pages
 
